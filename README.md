@@ -1,0 +1,2 @@
+# pyscript-sqlite
+PyScript SQLite
