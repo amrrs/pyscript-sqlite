@@ -1,0 +1,64 @@
+<html>
+
+<head>
+
+<title>
+
+Read CSV with Pandas using PyScript
+    
+</title>
+
+<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
+<!---pyodide--> 
+
+<py-env>
+    - pandas
+</py-env>
+
+</head>
+
+<body>
+    
+    <h1>Read CSV with Pandas using PyScript</h1>
+
+    <p id="csv"></p>
+
+    <py-script>
+
+        import pandas as pd 
+
+        import sqlite3 as sql
+
+
+        from pyodide.http import open_url
+
+        # read csv using pandas 
+
+        url_content = open_url("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/diamonds.csv")
+
+        diamonds = pd.read_csv(url_content)
+
+        # create a sqllite table 
+
+        conn = sql.connect('diamonds.db')
+        diamonds.to_sql('diamonds', conn)
+
+        # read from sql into a pandas dataframe
+
+        df = pd.read_sql('SELECT cut, avg(price) as avg_price FROM diamonds group by 1', conn)
+
+        # print the output back
+        
+        csv = Element('csv')
+
+        csv.write(df)
+
+        print(df.shape)
+
+    </py-script>
+
+</body>
+
+</html>
